@@ -45,9 +45,10 @@ public class GraetzelSteps {
         String url = BASE_URL + date;
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--headless=new"); // Run without a GUI
+        options.addArguments("--no-sandbox"); // bypass OS security model (required for Docker)
+        options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+        options.addArguments("--remote-allow-origins=*"); // prevents 403 Forbidden errors
         driver = new ChromeDriver(options);
         driver.get(url);
         takeScreenshot("page_loaded");
