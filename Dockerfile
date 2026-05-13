@@ -4,9 +4,14 @@ FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
 
 # Install Maven, Chrome dependencies and Chrome itself
-RUN apt-get update && apt-get install -y maven wget gnupg \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
+RUN apt-get update && apt-get install -y \
+    maven \
+    wget \
+    gnupg \
+    ca-certificates \
+    --no-install-recommends \
+    && wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google-chrome.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list \
     && apt-get update && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
