@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get update && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
 # Build the app
 COPY . .
 RUN mvn clean test
