@@ -2,7 +2,7 @@ Feature: Graetzelrad Check availability on date and book in case its available
 
   Scenario Outline: Successful login with different credentials
     Given the user opens Graetzels booking website handing over <datum>
-    When the suer can see Modal Window "Privatsphäre", close it via "Alle Dienste erlauben"
+    When the user can see Modal Window "Privatsphäre", close it via "Alle Dienste erlauben"
     When the user can see "Sofort buchen" in the title
     When the user fills the following details:
       | Field       | Value      |
@@ -18,4 +18,4 @@ Feature: Graetzelrad Check availability on date and book in case its available
 
     Examples:
       | datum |
-      | 09.06.2026 |
+      | 11.06.2026 |

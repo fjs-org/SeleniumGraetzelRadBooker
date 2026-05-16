@@ -54,8 +54,8 @@ public class GraetzelSteps {
         takeScreenshot("page_loaded");
     }
 
-    @When("^the suer can see Modal Window \"([^\"]+)\", close it via \"([^\"]+)\"$")
-    public void the_suer_closes_modal(String modalText, String buttonText) {
+    @When("^the user can see Modal Window \"([^\"]+)\", close it via \"([^\"]+)\"$")
+    public void the_user_closes_modal(String modalText, String buttonText) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[contains(text(), '" + modalText + "')]")
@@ -84,14 +84,16 @@ public class GraetzelSteps {
             WebElement element = driver.findElement(
                     By.xpath("//*[@id=//label[contains(text(),'" + field + "')]/@for and (self::input or self::select)]")
             );
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(false);", element);
+
             if ("select".equals(element.getTagName())) {
                 new Select(element).selectByVisibleText(value);
             } else {
                 element.clear();
                 element.sendKeys(value);
             }
+            takeScreenshot("details_filled: " + field + "value: " + value);
         }
-        takeScreenshot("details_filled");
     }
 
     @When("^the user fills DropDown \"([^\"]+)\" with \"([^\"]+)\"$")
