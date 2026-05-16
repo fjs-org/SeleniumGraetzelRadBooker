@@ -4,6 +4,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -49,12 +50,13 @@ public class GraetzelSteps {
         options.addArguments("--no-sandbox"); // bypass OS security model (required for Docker)
         options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
         options.addArguments("--remote-allow-origins=*"); // prevents 403 Forbidden errors
+        options.addArguments("--force-device-scale-factor=0.75"); // Decreases the UI size by 25%
         driver = new ChromeDriver(options);
         driver.get(url);
         takeScreenshot("page_loaded");
     }
 
-    @When("^the user can see Modal Window \"([^\"]+)\", close it via \"([^\"]+)\"$")
+    @And("^the user can see Modal Window \"([^\"]+)\", close it via \"([^\"]+)\"$")
     public void the_user_closes_modal(String modalText, String buttonText) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -68,7 +70,7 @@ public class GraetzelSteps {
         takeScreenshot("privacy_modal_closed");
     }
 
-    @When("^the user can see \"([^\"]+)\" in the title$")
+    @And("^the user can see \"([^\"]+)\" in the title$")
     public void the_user_sees_title(String visibleText) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.titleContains(visibleText));
@@ -96,19 +98,19 @@ public class GraetzelSteps {
         }
     }
 
-    @When("^the user fills DropDown \"([^\"]+)\" with \"([^\"]+)\"$")
+    @And("^the user fills DropDown \"([^\"]+)\" with \"([^\"]+)\"$")
     public void the_user_fills_dropdown(String fieldLabel, String value) {
         WebElement selectElement = driver.findElement(
                 By.xpath("//select[@id=//label[contains(text(),'" + fieldLabel + "')]/@for]")
         );
         ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView(true); arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change'));",
+                "arguments[0].scrollIntoView(false); arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change'));",
                 selectElement, value
         );
         takeScreenshot("dropdown_filled");
     }
 
-    @When("the user clicks {string}")
+    @And("the user clicks {string}")
     public void the_user_clicks(String buttonText) {
         WebElement button = driver.findElement(
                 By.xpath("//*[contains(text(), '" + buttonText + "')]")
