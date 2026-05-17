@@ -58,6 +58,9 @@ jobs:
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_OUTPUT
           echo "IMAGE_DIGEST=$DIGEST" >> $GITHUB_OUTPUT
 
+      - name: Deploy new Revision with new image on GCR
+        run: gcloud run deploy graetzelradbooker --image=${{ steps.build-and-push-image.outputs.IMAGE_URI }} --region=europe-west1
+
       - name: Job Summary
         run: |
           echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
